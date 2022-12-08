@@ -4,8 +4,7 @@ from Sudoku import Sudoku
 
 def main():
     game = Sudoku()
-    game.create()
-    game.display()
+    game.play()
     return 0
 
 
