@@ -248,12 +248,12 @@ class Sudoku:
 
     def title(self):
         """Print the title"""
-        print("       SUDOKU v0.1")
-        print()
+        print("       SUDOKU v0.1\n")
 
     def play(self):
         """Starts the game"""
         err = False
+        sat = True
         prev = None
         # initiate the game
         self.create()
@@ -263,19 +263,24 @@ class Sudoku:
             self.title()
             self.display_grid()
             print()
+            if is_valid_grid(self.grid, self.valid_grid):
+                print("Congratz, You won!")
+                break
             self.print_fillable()
             print()
 
             print("[XY n] fill n in XY", end='\t')
             print("[r] restart", end='\t')
-            print("[q] quit", end='\t')
-            print("\n")
+            print("[q] quit\n")
             try:
                 if prev:
                     print("Previous input :", prev)
                 if err:
                     print("Invalid input")
-                err = False
+                    err = False
+                if not sat:
+                    print("Not satisfiable")
+                    sat = True
                 x = input("[>] : ").upper()
                 prev = x
                 if x == 'Q':
@@ -297,7 +302,7 @@ class Sudoku:
 
                 # check if it is not satisfiable, then ignore it
                 if not self.is_sat(row, col, n):
-                    err = True
+                    sat = False
                     continue
 
                 # change the value
@@ -306,9 +311,6 @@ class Sudoku:
                 self.removed[pos] = n
 
                 # check if the grid is already equal to the valid_grid, then the game is finished
-                if is_valid_grid(self.grid, self.valid_grid):
-                    print("Congratz, You won!")
-                    break
 
             except Exception as e:
                 err = True
