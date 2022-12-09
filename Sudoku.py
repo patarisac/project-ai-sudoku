@@ -2,7 +2,8 @@ import random
 import math
 import os
 
-CLEAR = 'clear' if os.name == 'posix' else 'cls'
+CLEAR = "clear" if os.name == "posix" else "cls"
+
 
 def generate_0_grid():
     """Return 9x9 zero filled grid"""
@@ -23,6 +24,7 @@ def copy_grid(a):
             copygrid[r].append(a[r][c])
     return copygrid
 
+
 def is_valid_grid(a, b):
     """Return True if grid a is equal to grid b, else return False"""
     for r in range(9):
@@ -30,6 +32,7 @@ def is_valid_grid(a, b):
             if a[r][c] != b[r][c]:
                 return False
     return True
+
 
 class Sudoku:
     def __init__(self):
@@ -58,7 +61,7 @@ class Sudoku:
         }
         # to store removed elements from the valid grid
         self.removed = {}
-    
+
     def clear(self):
         """Clear terminal"""
         os.system(CLEAR)
@@ -73,7 +76,7 @@ class Sudoku:
         row = self.row_d[pos[0]]
         col = int(pos[1]) - 1
         self.grid[row][col] = num
-    
+
     def print_fillable(self):
         """Print position that can be filled"""
         nrow = math.ceil(len(self.removed) // 5)
@@ -82,13 +85,13 @@ class Sudoku:
         for row in range(nrow):
             for col in range(5):
                 try:
-                    print(keys[i],"=",self.removed[keys[i]], end="\t")
+                    print(keys[i], "=", self.removed[keys[i]], end="\t")
                     i += 1
                 except:
                     pass
             print()
 
-    def is_not_complete(self, l=[0,0]):
+    def is_not_complete(self, l=[0, 0]):
         """Return True is the grid is not complete, else return False"""
         for row in range(9):
             for col in range(9):
@@ -119,10 +122,9 @@ class Sudoku:
         bcol = col - col % 3
         for r in range(3):
             for c in range(3):
-                if self.grid[r+brow][c+bcol] == num:
+                if self.grid[r + brow][c + bcol] == num:
                     return False
         return True
-
 
     def display_grid(self):
         """Print the grid"""
@@ -133,7 +135,9 @@ class Sudoku:
             print(
                 " | ".join(
                     [
-                        " ".join(str(x) for x in self.grid[i][j : j + 3]).replace('0', '-')
+                        " ".join(str(x) for x in self.grid[i][j : j + 3]).replace(
+                            "0", "-"
+                        )
                         for j in range(0, 9, 3)
                     ]
                 )
@@ -144,7 +148,9 @@ class Sudoku:
             print(
                 " | ".join(
                     [
-                        " ".join(str(x) for x in self.grid[i][j : j + 3]).replace('0', '-')
+                        " ".join(str(x) for x in self.grid[i][j : j + 3]).replace(
+                            "0", "-"
+                        )
                         for j in range(0, 9, 3)
                     ]
                 )
@@ -155,7 +161,9 @@ class Sudoku:
             print(
                 " | ".join(
                     [
-                        " ".join(str(x) for x in self.grid[i][j : j + 3]).replace('0', '-')
+                        " ".join(str(x) for x in self.grid[i][j : j + 3]).replace(
+                            "0", "-"
+                        )
                         for j in range(0, 9, 3)
                     ]
                 )
@@ -180,7 +188,7 @@ class Sudoku:
         col = l[1]
 
         # consider digits 1 to 9
-        nums = list(range(1,10))
+        nums = list(range(1, 10))
         # random the digits
         random.shuffle(nums)
         for num in nums:
@@ -203,22 +211,22 @@ class Sudoku:
 
     def create(self):
         """Create the Sudoku challenge grid"""
-        self.generate_grid() # generate the valid grid to self.grid
-        self.valid_grid = copy_grid(self.grid) # store the valid grid self.valid_grid
-        difficulty = 30 # max removed value
+        self.generate_grid()  # generate the valid grid to self.grid
+        self.valid_grid = copy_grid(self.grid)  # store the valid grid self.valid_grid
+        difficulty = 30  # max removed value
 
         # removing the value from grid
         while difficulty > 0:
             # randomly pick row and col
-            row = random.randint(0,8)
-            col = random.randint(0,8)
+            row = random.randint(0, 8)
+            col = random.randint(0, 8)
 
             # ignore and try again if the value already 0
             if self.grid[row][col] == 0:
                 continue
 
             # convert to string type position ([0,0] to A1, [1,0] to B1, etc)
-            pos = self.row_d[row] + str(col+1)
+            pos = self.row_d[row] + str(col + 1)
             # store the removed position to self.removed dictionary
             self.removed[pos] = 0
 
@@ -269,8 +277,8 @@ class Sudoku:
             self.print_fillable()
             print()
 
-            print("[XY n] fill n in XY", end='\t')
-            print("[r] restart", end='\t')
+            print("[XY n] fill n in XY", end="\t")
+            print("[r] restart", end="\t")
             print("[q] quit\n")
             try:
                 if prev:
@@ -283,10 +291,10 @@ class Sudoku:
                     sat = True
                 x = input("[>] : ").upper()
                 prev = x
-                if x == 'Q':
+                if x == "Q":
                     print("Good bye.")
                     break
-                elif x == 'R':
+                elif x == "R":
                     self.__init__()
                     self.create()
                     self.removed = dict(sorted(self.removed.items()))
@@ -296,7 +304,14 @@ class Sudoku:
                 row = self.row_d[pos[0]]
                 col = int(pos[1]) - 1
                 n = int(x[1])
-                if pos not in list(self.removed) or pos[0] not in list(self.row_d) or int(pos[1]) < 1 or int(pos[1]) > 9 or n < 0 or n > 9:
+                if (
+                    pos not in list(self.removed)
+                    or pos[0] not in list(self.row_d)
+                    or int(pos[1]) < 1
+                    or int(pos[1]) > 9
+                    or n < 0
+                    or n > 9
+                ):
                     err = True
                     continue
 
